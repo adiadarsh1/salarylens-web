@@ -18,8 +18,11 @@ const hasEsp = Boolean(action);
         name="fields[email]"
         required
         placeholder="you@example.com"
+        autocomplete="email"
         class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 sm:max-w-xs"
       />
+      <input type="hidden" name="ml-submit" value="1" />
+      <input type="hidden" name="anticsrf" value="true" />
       <button type="submit" class="btn-primary">Subscribe</button>
     </form>
   ) : (

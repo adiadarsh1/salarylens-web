@@ -14,8 +14,8 @@ export const SITE = {
   // Chrome Web Store listing for the companion extension (update once live URL known).
   extensionUrl:
     'https://chromewebstore.google.com/search/SalaryLens%20CTC%20in-hand%20salary',
-  // MailerLite embedded form action — replace with real form URL when created.
-  newsletterAction: '',
+  // MailerLite embedded form action (classic jsonp endpoint).
+  newsletterAction: 'https://dashboard.mailerlite.com/jsonp/2565031/forms/195310228067059288/subscribe',
   twitter: '@adi.commits',
 };
 
