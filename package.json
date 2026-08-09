@@ -1,0 +1,28 @@
+{
+  "name": "salarylens-web",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Free in-hand salary calculator for India — decode any CTC into real take-home pay.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && gh-pages -d dist -b gh-pages --dotfiles -m \"Deploy site\"",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/sitemap": "3.2.1",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.15.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.10"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.5.4"
+  }
+}

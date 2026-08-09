@@ -1,0 +1,64 @@
+---
+import Article from '../../layouts/Article.astro';
+import { url } from '../../lib/url';
+---
+<Article
+  title="How In-Hand Salary Is Calculated in India (FY 2025-26)"
+  heading="How in-hand salary is calculated in India"
+  description="A step-by-step guide to going from CTC to your real monthly in-hand salary in India, covering EPF, gratuity, professional tax and income tax."
+  path="/guides/how-in-hand-salary-is-calculated/"
+  updated="Aug 2026"
+>
+  <p>
+    Your <strong>in-hand salary</strong> is the money that actually lands in your bank account each
+    month. It is almost always far lower than your <strong>CTC (Cost to Company)</strong>, because
+    CTC bundles in costs the company incurs on you that are never paid out as monthly cash. Here is
+    the exact sequence.
+  </p>
+
+  <h2>Step 1 — Start from cash CTC</h2>
+  <p>
+    Take your annual <strong>cash CTC</strong> (base + fixed allowances + variable/bonus). Exclude
+    stock/RSUs — those vest separately and are taxed differently.
+  </p>
+
+  <h2>Step 2 — Remove employer contributions</h2>
+  <p>CTC includes two things that never reach you as salary:</p>
+  <ul>
+    <li><strong>Employer PF</strong> — 12% of basic (or 12% of the ₹15,000/month wage ceiling, i.e. ₹1,800/month, if your employer caps it).</li>
+    <li><strong>Gratuity</strong> — accrued at about 4.81% of basic per year.</li>
+  </ul>
+  <p>Both are part of CTC but are set aside for you, not paid monthly.</p>
+
+  <h2>Step 3 — Set aside variable pay</h2>
+  <p>
+    Variable / performance bonus is usually paid quarterly or annually, so it doesn't form part of
+    your <em>monthly</em> in-hand — but it is still taxable income for the year.
+  </p>
+
+  <h2>Step 4 — Deduct your own contributions and taxes</h2>
+  <p>From the remaining gross salary, subtract:</p>
+  <ul>
+    <li><strong>Employee EPF</strong> — another 12% of basic, which goes to your retirement corpus.</li>
+    <li><strong>Professional tax</strong> — a small state levy, typically about ₹2,400/year.</li>
+    <li><strong>Income tax + 4% cess</strong> — after the ₹75,000 standard deduction and the ₹12L Section 87A rebate under the new regime.</li>
+  </ul>
+
+  <h2>Step 5 — Divide by 12</h2>
+  <p>
+    Whatever remains is your annual in-hand. Divide by 12 for the monthly figure. For most Indian
+    tech salaries this lands around 65–80% of cash CTC, dropping as your CTC (and tax) rises.
+  </p>
+
+  <h2>The formula in one line</h2>
+  <p>
+    <em>In-hand = CTC − employer PF − gratuity − variable − employee PF − professional tax − income tax</em>
+    (variable is added back only when it is actually paid).
+  </p>
+
+  <p>
+    Want the numbers for your salary? Use the free
+    <a href={url('/')}>in-hand salary calculator</a> or compare the
+    <a href={url('/new-vs-old-tax-regime/')}>new vs old tax regime</a>.
+  </p>
+</Article>

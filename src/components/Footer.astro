@@ -1,0 +1,64 @@
+---
+import { url } from '../lib/url';
+import { SITE } from '../consts';
+
+const cols = [
+  {
+    title: 'Calculators',
+    links: [
+      { label: 'In-hand salary calculator', href: url('/') },
+      { label: 'New vs Old regime', href: url('/new-vs-old-tax-regime/') },
+      { label: 'Salary by company', href: url('/companies/') },
+      { label: 'Salary by CTC', href: url('/in-hand-salary/') },
+    ],
+  },
+  {
+    title: 'Guides',
+    links: [
+      { label: 'How in-hand is calculated', href: url('/guides/how-in-hand-salary-is-calculated/') },
+      { label: 'EPF & gratuity explained', href: url('/guides/epf-and-gratuity/') },
+      { label: 'CTC vs gross vs net', href: url('/guides/ctc-vs-gross-vs-net/') },
+      { label: 'Professional tax by state', href: url('/guides/professional-tax/') },
+    ],
+  },
+  {
+    title: 'About',
+    links: [
+      { label: 'About', href: url('/about/') },
+      { label: 'Methodology', href: url('/methodology/') },
+      { label: 'Disclaimer', href: url('/disclaimer/') },
+      { label: 'Privacy', href: url('/privacy/') },
+    ],
+  },
+];
+---
+
+<footer class="mt-16 border-t border-black/5 bg-white">
+  <div class="container-page py-10">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2 font-semibold text-ink">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-600 text-white">₹</span>
+          {SITE.name}
+        </div>
+        <p class="mt-3 max-w-xs text-sm text-slate-500">
+          Free in-hand salary calculator for India. Estimates for {SITE.fy}.
+        </p>
+      </div>
+      {cols.map((c) => (
+        <div>
+          <h3 class="text-sm font-semibold text-ink">{c.title}</h3>
+          <ul class="mt-3 space-y-2 text-sm text-slate-500">
+            {c.links.map((l) => (
+              <li><a href={l.href} class="hover:text-ink">{l.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <div class="mt-10 flex flex-col items-start justify-between gap-3 border-t border-black/5 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center">
+      <p>© {new Date().getFullYear()} {SITE.name}. Estimates only — not tax advice.</p>
+      <p>Built by {SITE.author}.</p>
+    </div>
+  </div>
+</footer>

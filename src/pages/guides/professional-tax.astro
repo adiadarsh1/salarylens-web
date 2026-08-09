@@ -1,0 +1,42 @@
+---
+import Article from '../../layouts/Article.astro';
+import { url } from '../../lib/url';
+---
+<Article
+  title="Professional Tax in India by State (FY 2025-26)"
+  heading="Professional tax by state"
+  description="What professional tax is, how much it costs per year, and how it varies by state in India. A small but real deduction from your in-hand salary."
+  path="/guides/professional-tax/"
+  updated="Aug 2026"
+>
+  <p>
+    <strong>Professional tax (PT)</strong> is a small tax on income from employment, levied by
+    <em>state</em> governments (not the central government). It's modest — usually a few thousand
+    rupees a year — but it does reduce your in-hand salary and is deducted directly from your payslip.
+  </p>
+
+  <h2>How much is it?</h2>
+  <p>
+    Most states cap professional tax at <strong>₹2,500 per year</strong> (the constitutional
+    maximum), commonly deducted as about ₹200/month. That's why the
+    <a href={url('/')}>calculator</a> uses a default of ₹2,400/year.
+  </p>
+
+  <h2>It varies by state</h2>
+  <ul>
+    <li><strong>Levied</strong> in states like Maharashtra, Karnataka, West Bengal, Tamil Nadu, Telangana, Gujarat, Andhra Pradesh and Madhya Pradesh — typically up to ₹2,400–₹2,500/year.</li>
+    <li><strong>Not levied</strong> in several states/UTs including Delhi, Haryana, Uttar Pradesh, Uttarakhand and Rajasthan — where PT is ₹0.</li>
+  </ul>
+  <p>
+    Slabs are usually income-based, so lower earners pay less or nothing. Because it's capped so
+    low, professional tax has only a tiny effect on take-home compared with income tax and EPF.
+  </p>
+
+  <h2>Is it deductible?</h2>
+  <p>
+    Under the <strong>old regime</strong>, professional tax paid is deductible from salary income.
+    Under the <strong>new regime</strong> it is not separately deductible. Either way it's a small
+    line item — see how it fits into your full breakdown in the
+    <a href={url('/')}>in-hand salary calculator</a>.
+  </p>
+</Article>

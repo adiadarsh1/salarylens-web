@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Calculator from '../components/Calculator.tsx';
+import Faq from '../components/Faq.astro';
+import ExtensionCta from '../components/ExtensionCta.astro';
+import EmailCapture from '../components/EmailCapture.astro';
+import { computeInHand, compareRegimes } from '../lib/ctc';
+import { formatINR } from '../lib/format';
+import { SITE } from '../consts';
+import { url, canonical } from '../lib/url';
+import { webAppSchema, faqSchema, breadcrumbSchema } from '../lib/schema';
+
+const path = '/new-vs-old-tax-regime/';
+const canonicalUrl = canonical(Astro.site, import.meta.env.BASE_URL, path);
+const title = 'New vs Old Tax Regime Calculator (India, FY 2025-26)';
+const description =
+  'Compare the new and old income tax regimes for your CTC. See which gives you a higher in-hand salary for FY 2025-26, with a full side-by-side breakdown.';
+
+// Build-time worked example at ₹18L so the comparison is in the static HTML.
+const sample = { ctc: 1_800_000, basicPct: 45, variablePct: 10, pfOnActualBasic: true, professionalTaxAnnual: 2_400 };
+const cmp = compareRegimes(sample, 150_000);
+
+const faqs = [
+  { q: 'Which tax regime is better in FY 2025-26?', a: 'It depends on your deductions. The new regime has lower slab rates and a ₹75,000 standard deduction but allows almost no other deductions. The old regime has higher rates but lets you claim 80C, 80D, HRA and home-loan interest. If your total deductions exceed roughly ₹3.75–4 lakh, the old regime often wins; otherwise the new regime usually does.' },
+  { q: 'What is the 87A rebate in the new regime?', a: 'Under the new regime for FY 2025-26, a Section 87A rebate makes taxable income up to ₹12,00,000 effectively tax-free. In the old regime the rebate limit is ₹5,00,000.' },
+  { q: 'Is the new regime the default?', a: 'Yes. From FY 2023-24 onwards the new regime is the default. You must explicitly opt for the old regime if it benefits you.' },
+  { q: 'Can I switch regimes every year?', a: 'Salaried individuals without business income can choose the regime each financial year while filing their return.' },
+];
+
+const schemas = [
+  webAppSchema(canonicalUrl, 'New vs Old Regime Calculator', description),
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: 'Home', url: canonical(Astro.site, import.meta.env.BASE_URL, '/') },
+    { name: 'New vs Old Regime', url: canonicalUrl },
+  ]),
+];
+---
+
+<Base title={title} description={description} path={path} jsonLd={schemas}>
+  <section class="border-b border-black/5 bg-white">
+    <div class="container-page py-10 sm:py-14">
+      <p class="text-sm font-medium text-brand-600">{SITE.fy}</p>
+      <h1 class="mt-2 max-w-3xl text-3xl font-bold sm:text-4xl">New vs Old Tax Regime Calculator</h1>
+      <p class="mt-3 max-w-2xl text-slate-600">
+        Enter your CTC to see your in-hand salary under both the new and old income
+        tax regimes side by side, and which one leaves you with more money.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-8">
+    <Calculator client:load initialCtc={1800000} />
+  </section>
+
+  <section class="container-page">
+    <div class="prose-page mt-6">
+      <h2>Worked example: ₹18,00,000 CTC</h2>
+      <p>
+        For a ₹18L cash CTC (45% basic, 10% variable), the new regime gives about
+        <strong>{formatINR(cmp.newRegime.inHandMonthly)}/month</strong> in-hand
+        (₹{formatINR(cmp.newRegime.incomeTaxAnnual)} annual tax), while the old regime with
+        ₹1.5L of deductions gives about <strong>{formatINR(cmp.oldRegime.inHandMonthly)}/month</strong>
+        (₹{formatINR(cmp.oldRegime.incomeTaxAnnual)} tax). Here the
+        <strong>{cmp.better} regime</strong> wins by {formatINR(cmp.savingsAnnual)} per year.
+      </p>
+      <h2>How to choose</h2>
+      <ul>
+        <li><strong>New regime</strong> — best if you don't claim many deductions. Lower rates + ₹75k standard deduction + tax-free up to ₹12L taxable (87A).</li>
+        <li><strong>Old regime</strong> — best if you max out 80C (₹1.5L), 80D, HRA and home-loan interest, so your deductions typically exceed ₹3.75–4L.</li>
+      </ul>
+      <p>See the full <a href={url('/methodology/')}>methodology</a> for the exact slabs and formula.</p>
+    </div>
+
+    <ExtensionCta />
+    <EmailCapture />
+    <Faq items={faqs} />
+  </section>
+</Base>

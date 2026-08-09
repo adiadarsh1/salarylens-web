@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import ExtensionCta from '../../components/ExtensionCta.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
+import { COMPANIES } from '../../consts';
+import { computeInHand } from '../../lib/ctc';
+import { formatINR, formatCompactINR } from '../../lib/format';
+import { url, canonical } from '../../lib/url';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const path = '/companies/';
+const canonicalUrl = canonical(Astro.site, import.meta.env.BASE_URL, path);
+const title = 'In-Hand Salary by Company (India) — Take-Home Calculator';
+const description = 'Estimate your in-hand salary at top Indian employers — TCS, Infosys, Microsoft, Amazon, Google and more. Monthly take-home from a typical CTC structure.';
+
+const rows = COMPANIES.map((c) => {
+  const b = computeInHand({ ctc: c.sampleCtc, basicPct: c.basicPct, variablePct: c.variablePct, pfOnActualBasic: c.pfOnActualBasic, professionalTaxAnnual: 2_400 });
+  return { ...c, monthly: b.inHandMonthly };
+});
+
+const schemas = [breadcrumbSchema([
+  { name: 'Home', url: canonical(Astro.site, import.meta.env.BASE_URL, '/') },
+  { name: 'By company', url: canonicalUrl },
+])];
+---
+
+<Base title={title} description={description} path={path} jsonLd={schemas}>
+  <section class="border-b border-black/5 bg-white">
+    <div class="container-page py-10 sm:py-12">
+      <h1 class="text-3xl font-bold sm:text-4xl">In-Hand Salary by Company</h1>
+      <p class="mt-3 max-w-2xl text-slate-600">
+        Estimated take-home at top Indian employers, using each company's typical salary
+        structure. Numbers are estimates from a sample CTC — click through to enter your own offer.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-8">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {rows.map((c) => (
+        <a href={url(`/companies/${c.slug}/`)} class="card p-4 hover:ring-brand-200">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-ink">{c.name}</span>
+            <span class="text-xs text-slate-400">{formatCompactINR(c.sampleCtc)} CTC</span>
+          </div>
+          <p class="mt-1 text-sm text-slate-500">~{formatINR(c.monthly)}/mo in-hand</p>
+        </a>
+      ))}
+    </div>
+
+    <ExtensionCta />
+    <EmailCapture />
+  </section>
+</Base>

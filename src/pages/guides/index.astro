@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
+import { url, canonical } from '../../lib/url';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const path = '/guides/';
+const title = 'Salary & Tax Guides for India';
+const description = 'Plain-English guides on how Indian salary works — in-hand vs CTC, EPF and gratuity, tax regimes, professional tax and deductions.';
+
+const guides = [
+  { href: url('/guides/how-in-hand-salary-is-calculated/'), title: 'How in-hand salary is calculated in India', desc: 'The exact steps from CTC to your monthly take-home.' },
+  { href: url('/guides/ctc-vs-gross-vs-net/'), title: 'CTC vs gross vs net salary', desc: 'What each term means and why they are so different.' },
+  { href: url('/guides/epf-and-gratuity/'), title: 'EPF and gratuity explained', desc: 'How much goes to retirement and how gratuity is computed.' },
+  { href: url('/guides/professional-tax/'), title: 'Professional tax by state', desc: 'The small state levy on your salary and how much it is.' },
+  { href: url('/guides/standard-deduction-87a/'), title: 'Standard deduction & 87A rebate', desc: 'The deductions that make income up to ₹12L tax-free.' },
+];
+
+const schemas = [breadcrumbSchema([
+  { name: 'Home', url: canonical(Astro.site, import.meta.env.BASE_URL, '/') },
+  { name: 'Guides', url: canonical(Astro.site, import.meta.env.BASE_URL, path) },
+])];
+---
+
+<Base title={title} description={description} path={path} jsonLd={schemas}>
+  <section class="border-b border-black/5 bg-white">
+    <div class="container-page py-10 sm:py-12">
+      <h1 class="text-3xl font-bold sm:text-4xl">Salary & Tax Guides</h1>
+      <p class="mt-3 max-w-2xl text-slate-600">Plain-English explainers on how Indian salary and tax actually work.</p>
+    </div>
+  </section>
+  <section class="container-page py-8">
+    <div class="grid gap-3 sm:grid-cols-2">
+      {guides.map((g) => (
+        <a href={g.href} class="card p-5 hover:ring-brand-200">
+          <h2 class="font-semibold text-ink">{g.title}</h2>
+          <p class="mt-1 text-sm text-slate-500">{g.desc}</p>
+        </a>
+      ))}
+    </div>
+    <EmailCapture />
+  </section>
+</Base>

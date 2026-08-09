@@ -1,0 +1,48 @@
+---
+import Article from '../../layouts/Article.astro';
+import { url } from '../../lib/url';
+---
+<Article
+  title="EPF and Gratuity Explained (India) — How Much of Your CTC Goes There"
+  heading="EPF and gratuity explained"
+  description="How EPF (employer + employee PF) and gratuity are calculated in India, why they reduce your in-hand salary, and why they are still your money."
+  path="/guides/epf-and-gratuity/"
+  updated="Aug 2026"
+>
+  <p>
+    Two chunks of your CTC quietly disappear from your monthly in-hand: <strong>EPF</strong> and
+    <strong>gratuity</strong>. They feel like deductions, but both are savings that belong to you.
+  </p>
+
+  <h2>EPF (Employees' Provident Fund)</h2>
+  <p>
+    EPF is a retirement savings scheme. Both you and your employer contribute <strong>12% of your
+    basic salary</strong> each month:
+  </p>
+  <ul>
+    <li><strong>Employee PF (12% of basic)</strong> — deducted from your salary, so it lowers your in-hand.</li>
+    <li><strong>Employer PF (12% of basic)</strong> — part of your CTC, paid on top; also never reaches your account as cash.</li>
+  </ul>
+  <p>
+    Many employers cap PF at the statutory wage ceiling of <strong>₹15,000/month</strong>, i.e.
+    ₹1,800/month each. Others compute it on your actual basic — this is a key toggle in the
+    <a href={url('/')}>calculator</a>. EPF currently earns a government-declared interest rate
+    (around 8%) and is largely tax-free, making it one of the better forced-savings vehicles.
+  </p>
+
+  <h2>Gratuity</h2>
+  <p>
+    Gratuity is a lump sum paid when you leave after <strong>5 years</strong> of service (payable
+    per the Payment of Gratuity Act). In CTC it is accrued at roughly <strong>4.81% of basic per
+    year</strong>. It's part of your CTC but you only receive it on exit, so it never appears in
+    monthly in-hand.
+  </p>
+
+  <h2>Why they matter</h2>
+  <p>
+    Together, EPF and gratuity can be 10–15% of a fixed-heavy CTC. That's why your in-hand looks
+    smaller than expected — but it's building a retirement corpus, not vanishing. The
+    <a href={url('/')}>in-hand calculator</a> shows your total annual EPF savings alongside your
+    take-home so you can see the full picture.
+  </p>
+</Article>

@@ -1,0 +1,28 @@
+---
+import Article from '../layouts/Article.astro';
+import { url } from '../lib/url';
+import { SITE } from '../consts';
+---
+<Article
+  title="About SalaryLens"
+  heading="About SalaryLens"
+  description="SalaryLens is a free, no-sign-up in-hand salary calculator for India, built to make CTC transparent."
+  path="/about/"
+  showCta={false}
+>
+  <p>
+    <strong>{SITE.name}</strong> is a free, no-sign-up tool that decodes any Indian CTC into your
+    real monthly take-home pay. It exists because "CTC" is one of the most confusing numbers in an
+    Indian job offer — and the gap between CTC and in-hand catches almost everyone off guard.
+  </p>
+  <p>
+    The web calculator shares its tax engine with the <strong>SalaryLens Chrome extension</strong>,
+    which shows estimated in-hand salary right on job posts on LinkedIn and Naukri. Everything is
+    computed in your browser — no accounts, no salary data sent anywhere.
+  </p>
+  <p>
+    Built by {SITE.author}. Start with the <a href={url('/')}>in-hand salary calculator</a>, or
+    read the <a href={url('/methodology/')}>methodology</a> to see exactly how the numbers are
+    derived.
+  </p>
+</Article>

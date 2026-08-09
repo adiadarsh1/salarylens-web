@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Calculator from '../components/Calculator.tsx';
+import Faq from '../components/Faq.astro';
+import ExtensionCta from '../components/ExtensionCta.astro';
+import EmailCapture from '../components/EmailCapture.astro';
+import { SITE, CTC_VALUES } from '../consts';
+import { url, canonical } from '../lib/url';
+import { formatCompactINR } from '../lib/format';
+import { webAppSchema, faqSchema } from '../lib/schema';
+
+const path = '/';
+const canonicalUrl = canonical(Astro.site, import.meta.env.BASE_URL, path);
+
+const title = 'In-Hand Salary Calculator (India) — CTC to Take-Home';
+const description = SITE.description;
+
+const faqs = [
+  { q: 'How is in-hand salary calculated from CTC in India?', a: 'From your annual CTC we remove the employer PF and gratuity (which are part of CTC but never reach you as cash), then from the remaining gross we deduct your own EPF, professional tax and income tax. What is left is your in-hand pay, which we divide by 12 for the monthly figure.' },
+  { q: 'Does this use the new or old tax regime?', a: 'The main result uses the new regime (the default for FY 2025-26), and the page also shows a side-by-side new-vs-old comparison so you can see which one gives you a higher take-home.' },
+  { q: 'Is variable pay included in monthly in-hand?', a: 'No. Variable / bonus is usually paid separately (quarterly or annually), so we exclude it from the monthly in-hand but still count it as taxable income for the year.' },
+  { q: 'Are RSUs / stock part of in-hand salary?', a: 'No. Stock and RSUs are shown separately from cash in-hand because they vest over time and are taxed differently. Enter them in advanced options to see total compensation.' },
+  { q: 'Is this calculator free?', a: 'Yes, completely free with no sign-up. You can also install the free SalaryLens Chrome extension to see take-home directly on job posts.' },
+];
+
+const schemas = [webAppSchema(canonicalUrl, SITE.name, description), faqSchema(faqs)];
+---
+
+<Base title={title} description={description} path={path} jsonLd={schemas}>
+  <section class="border-b border-black/5 bg-white">
+    <div class="container-page py-10 sm:py-14">
+      <p class="text-sm font-medium text-brand-600">{SITE.fy} · New & old regime</p>
+      <h1 class="mt-2 max-w-3xl text-3xl font-bold sm:text-4xl">
+        In-Hand Salary Calculator for India
+      </h1>
+      <p class="mt-3 max-w-2xl text-slate-600">
+        Enter any CTC and instantly see your real <strong>monthly take-home pay</strong> —
+        with a full breakdown of EPF, gratuity, professional tax and income tax under the
+        new and old regimes. Free, no sign-up.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-8">
+    <Calculator client:load />
+  </section>
+
+  <section class="container-page">
+    <ExtensionCta />
+
+    <div class="prose-page mt-12">
+      <h2>How the in-hand salary calculation works</h2>
+      <p>
+        In India, your <strong>CTC (Cost to Company)</strong> is not the money that reaches
+        your bank account. CTC bundles in employer contributions — the employer's share of
+        <strong>EPF</strong> and <strong>gratuity</strong> — that are part of the company's
+        cost but never paid to you as monthly cash. Your true <strong>in-hand salary</strong>
+        is what remains after removing those, plus your own deductions:
+      </p>
+      <ul>
+        <li><strong>Employer PF & gratuity</strong> — removed first (part of CTC, not take-home).</li>
+        <li><strong>Employee EPF (12% of basic)</strong> — goes to your retirement corpus, not your account.</li>
+        <li><strong>Professional tax</strong> — a small state levy (~₹2,400/year).</li>
+        <li><strong>Income tax + 4% cess</strong> — after the ₹75,000 standard deduction and ₹12L 87A rebate (new regime).</li>
+      </ul>
+      <p>
+        The remainder, divided by 12, is your monthly in-hand. Read the full
+        <a href={url('/methodology/')}>methodology</a> or the guide on
+        <a href={url('/guides/how-in-hand-salary-is-calculated/')}>how in-hand salary is calculated</a>.
+      </p>
+    </div>
+
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold text-ink">In-hand salary by CTC</h2>
+      <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        {CTC_VALUES.map((v) => (
+          <a href={url(`/in-hand-salary/${Math.round(v / 100000)}-lpa/`)} class="card px-4 py-3 text-sm font-medium text-ink hover:ring-brand-200">
+            {formatCompactINR(v)} CTC →
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <EmailCapture />
+    <Faq items={faqs} />
+  </section>
+</Base>

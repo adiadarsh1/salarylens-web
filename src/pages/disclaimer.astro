@@ -1,0 +1,31 @@
+---
+import Article from '../layouts/Article.astro';
+import { url } from '../lib/url';
+---
+<Article
+  title="Disclaimer"
+  heading="Disclaimer"
+  description="SalaryLens provides salary estimates for informational purposes only and is not financial, tax or legal advice."
+  path="/disclaimer/"
+  showCta={false}
+>
+  <p>
+    All figures produced by SalaryLens are <strong>estimates for informational purposes only</strong>
+    and do not constitute financial, tax, legal or investment advice.
+  </p>
+  <p>
+    Actual in-hand salary depends on your exact salary structure, employer policies, chosen tax
+    regime, declared investments, city of residence and other factors that this tool simplifies or
+    cannot know. Tax rules also change with each Union Budget.
+  </p>
+  <p>
+    Company salary structures shown on this site are <strong>typical, community-observed patterns,
+    not official figures</strong>, and may not reflect any specific employer's current policy. Your
+    official offer letter and payslip are always the authoritative source.
+  </p>
+  <p>
+    Always verify important numbers with a qualified chartered accountant or tax advisor before
+    making financial decisions. SalaryLens accepts no liability for decisions made based on these
+    estimates. See the <a href={url('/methodology/')}>methodology</a> for our assumptions.
+  </p>
+</Article>

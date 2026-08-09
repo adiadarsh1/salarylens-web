@@ -1,0 +1,43 @@
+---
+import Article from '../layouts/Article.astro';
+import { SITE } from '../consts';
+---
+<Article
+  title="Privacy Policy"
+  heading="Privacy policy"
+  description="SalaryLens privacy policy — we do not collect or store your salary data. All calculations run in your browser."
+  path="/privacy/"
+  updated="Aug 2026"
+  showCta={false}
+>
+  <p>
+    {SITE.name} is built to be private by default. This policy explains what we do and don't collect.
+  </p>
+
+  <h2>Salary data stays in your browser</h2>
+  <p>
+    Every calculation on this site runs entirely in your browser (client-side). The CTC and other
+    numbers you enter are <strong>never sent to us or any server</strong>, and we do not store them.
+  </p>
+
+  <h2>Analytics</h2>
+  <p>
+    We use privacy-friendly, cookieless analytics to count page views and understand which pages are
+    useful. This does not identify you and does not track you across other sites.
+  </p>
+
+  <h2>Email (optional)</h2>
+  <p>
+    If you choose to subscribe to updates, we store only the email address you provide, solely to
+    send occasional salary and tax tips. You can unsubscribe at any time via the link in any email.
+  </p>
+
+  <h2>Third parties</h2>
+  <p>
+    Outbound links (for example to the Chrome Web Store) are governed by those sites' own privacy
+    policies. We don't sell or share your data.
+  </p>
+
+  <h2>Contact</h2>
+  <p>Questions about privacy? Reach out via the {SITE.name} Chrome Web Store listing or GitHub.</p>
+</Article>

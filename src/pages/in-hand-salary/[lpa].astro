@@ -1,0 +1,111 @@
+---
+import Base from '../../layouts/Base.astro';
+import Calculator from '../../components/Calculator.tsx';
+import StaticBreakdown from '../../components/StaticBreakdown.astro';
+import Faq from '../../components/Faq.astro';
+import ExtensionCta from '../../components/ExtensionCta.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
+import { computeInHand, compareRegimes, type CtcInput } from '../../lib/ctc';
+import { formatINR, formatCompactINR } from '../../lib/format';
+import { SITE, CTC_VALUES } from '../../consts';
+import { url, canonical } from '../../lib/url';
+import { webAppSchema, faqSchema, breadcrumbSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return CTC_VALUES.map((ctc) => ({
+    params: { lpa: `${Math.round(ctc / 100000)}-lpa` },
+    props: { ctc },
+  }));
+}
+
+const { ctc } = Astro.props as { ctc: number };
+const lpa = Math.round(ctc / 100000);
+const path = `/in-hand-salary/${lpa}-lpa/`;
+const canonicalUrl = canonical(Astro.site, import.meta.env.BASE_URL, path);
+
+const input: CtcInput = { ctc, basicPct: 45, variablePct: 10, pfOnActualBasic: true, professionalTaxAnnual: 2_400 };
+const b = computeInHand(input);
+const cmp = compareRegimes(input, 150_000);
+
+const label = formatCompactINR(ctc);
+const title = `In-Hand Salary for ${lpa} LPA CTC in India (FY 2025-26)`;
+const description = `For a ₹${lpa} LPA CTC in India, the estimated in-hand salary is about ${formatINR(b.inHandMonthly)}/month (${formatINR(b.inHandAnnual)}/year) after PF, gratuity and income tax. Full breakdown inside.`;
+
+const faqs = [
+  { q: `What is the in-hand salary for ${lpa} LPA in India?`, a: `For a ₹${lpa} LPA cash CTC with a typical 45% basic and 10% variable, the estimated monthly in-hand is about ${formatINR(b.inHandMonthly)} under the new regime for FY 2025-26 — roughly ${(b.takeHomePct * 100).toFixed(1)}% of your cash CTC.` },
+  { q: `How much tax do I pay on ${lpa} LPA?`, a: `The estimated annual income tax (new regime, incl. 4% cess) on a ₹${lpa} LPA CTC is about ${formatINR(b.incomeTaxAnnual)}. Your exact tax depends on your salary structure and chosen regime.` },
+  { q: `What is the monthly take-home for ${lpa} LPA?`, a: `About ${formatINR(b.inHandMonthly)} per month, after removing employer PF and gratuity from CTC and deducting your EPF, professional tax and income tax.` },
+  { q: 'New or old regime for this CTC?', a: cmp.better === 'same' ? 'Both regimes give roughly the same take-home at this CTC.' : `The ${cmp.better} regime gives about ${formatINR(cmp.savingsAnnual)} more per year here (assuming ₹1.5L of old-regime deductions).` },
+];
+
+const schemas = [
+  webAppSchema(canonicalUrl, `In-hand salary for ${lpa} LPA`, description),
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: 'Home', url: canonical(Astro.site, import.meta.env.BASE_URL, '/') },
+    { name: 'In-hand by CTC', url: canonical(Astro.site, import.meta.env.BASE_URL, '/in-hand-salary/') },
+    { name: `${lpa} LPA`, url: canonicalUrl },
+  ]),
+];
+
+const others = CTC_VALUES.filter((v) => v !== ctc);
+---
+
+<Base title={title} description={description} path={path} jsonLd={schemas}>
+  <section class="border-b border-black/5 bg-white">
+    <div class="container-page py-10 sm:py-12">
+      <nav class="text-xs text-slate-400">
+        <a href={url('/')}>Home</a> / <a href={url('/in-hand-salary/')}>In-hand by CTC</a> / {lpa} LPA
+      </nav>
+      <h1 class="mt-2 text-3xl font-bold sm:text-4xl">In-Hand Salary for {lpa} LPA CTC</h1>
+      <p class="mt-3 max-w-2xl text-slate-600">
+        A <strong>₹{lpa} LPA</strong> ({label}) cash CTC in India works out to roughly
+        <strong>{formatINR(b.inHandMonthly)} per month</strong> in-hand
+        ({formatINR(b.inHandAnnual)}/year) under the new regime for {SITE.fy}. Full breakdown below —
+        adjust the split for your exact offer.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-8">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <StaticBreakdown input={input} caption={`Assumes 45% basic, 10% variable, PF on actual basic. Estimate for ${SITE.fy}.`} />
+      <div class="prose-page">
+        <h2>What ₹{lpa} LPA really means</h2>
+        <p>
+          Your ₹{lpa} LPA CTC includes the employer's PF and gratuity, which never reach
+          you as cash. After removing those and deducting your own EPF ({formatINR(b.employeePfAnnual)}),
+          professional tax and income tax ({formatINR(b.incomeTaxAnnual)}), your take-home is
+          about {formatINR(b.inHandMonthly)}/month.
+        </p>
+        <p>
+          You're also building <strong>{formatINR(b.totalEpfAnnual)}/year</strong> of EPF
+          retirement savings (employer + employee) that isn't in your monthly in-hand but is
+          still your money.
+        </p>
+        <p>Want to tweak the numbers for your offer? Use the live calculator below.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page">
+    <h2 class="mb-4 text-xl font-semibold text-ink">Adjust for your exact offer</h2>
+    <Calculator client:visible initialCtc={ctc} />
+
+    <ExtensionCta />
+
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold text-ink">In-hand salary for other CTCs</h2>
+      <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        {others.map((v) => (
+          <a href={url(`/in-hand-salary/${Math.round(v / 100000)}-lpa/`)} class="card px-4 py-3 text-sm font-medium text-ink hover:ring-brand-200">
+            {formatCompactINR(v)} CTC →
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <EmailCapture />
+    <Faq items={faqs} />
+  </section>
+</Base>
