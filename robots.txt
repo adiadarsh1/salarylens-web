@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://adiadarsh1.github.io/salarylens-web/sitemap-index.xml
