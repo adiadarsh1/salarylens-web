@@ -6,25 +6,30 @@ const action = SITE.newsletterAction;
 const hasEsp = Boolean(action);
 ---
 
-<section class="mt-8 rounded-2xl border border-brand-100 bg-brand-50 p-6">
+<section class="ml-capture mt-8 rounded-2xl border border-brand-100 bg-brand-50 p-6">
   <h2 class="text-lg font-semibold text-ink">Get salary & tax tips for Indian techies</h2>
   <p class="mt-1 text-sm text-slate-600">
     Occasional, no-spam emails on take-home pay, tax-saving and negotiation. Unsubscribe anytime.
   </p>
   {hasEsp ? (
-    <form action={action} method="post" target="_blank" class="mt-4 flex flex-col gap-2 sm:flex-row">
-      <input
-        type="email"
-        name="fields[email]"
-        required
-        placeholder="you@example.com"
-        autocomplete="email"
-        class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 sm:max-w-xs"
-      />
-      <input type="hidden" name="ml-submit" value="1" />
-      <input type="hidden" name="anticsrf" value="true" />
-      <button type="submit" class="btn-primary">Subscribe</button>
-    </form>
+    <>
+      <form action={action} method="post" target="_blank" class="ml-form mt-4 flex flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          name="fields[email]"
+          required
+          placeholder="you@example.com"
+          autocomplete="email"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 sm:max-w-xs"
+        />
+        <input type="hidden" name="ml-submit" value="1" />
+        <input type="hidden" name="anticsrf" value="true" />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+      <p class="ml-success mt-4 hidden text-sm font-medium text-brand-700">
+        ✓ Thanks! Check your inbox to confirm your subscription.
+      </p>
+    </>
   ) : (
     <a
       href={`mailto:?subject=${encodeURIComponent('Subscribe: SalaryLens tips')}&body=${encodeURIComponent('Add me to the SalaryLens list.')}`}
@@ -34,3 +39,26 @@ const hasEsp = Boolean(action);
     </a>
   )}
 </section>
+
+<script>
+  // Progressive enhancement: submit in the background so the user stays on the
+  // page instead of being bounced to MailerLite's raw JSON response.
+  document.querySelectorAll<HTMLFormElement>('form.ml-form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Subscribing…';
+      }
+      try {
+        await fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
+      } catch (_) {
+        /* opaque no-cors response, ignore */
+      }
+      const section = form.closest('.ml-capture');
+      form.classList.add('hidden');
+      section?.querySelector('.ml-success')?.classList.remove('hidden');
+    });
+  });
+</script>
