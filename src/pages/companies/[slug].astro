@@ -5,9 +5,10 @@ import StaticBreakdown from '../../components/StaticBreakdown.astro';
 import Faq from '../../components/Faq.astro';
 import ExtensionCta from '../../components/ExtensionCta.astro';
 import EmailCapture from '../../components/EmailCapture.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
 import { computeInHand, type CtcInput } from '../../lib/ctc';
 import { formatINR, formatCompactINR } from '../../lib/format';
-import { SITE, COMPANIES, type CompanyPreset } from '../../consts';
+import { SITE, COMPANIES, CTC_VALUES, type CompanyPreset } from '../../consts';
 import { url, canonical } from '../../lib/url';
 import { webAppSchema, faqSchema, breadcrumbSchema } from '../../lib/schema';
 
@@ -49,6 +50,18 @@ const schemas = [
 ];
 
 const others = COMPANIES.filter((x) => x.slug !== c.slug).slice(0, 8);
+
+// Cross-silo internal links: nearest CTC pages by sample CTC + pillar guides.
+const nearLpa = [...CTC_VALUES]
+  .sort((a, z) => Math.abs(a - c.sampleCtc) - Math.abs(z - c.sampleCtc))
+  .slice(0, 4)
+  .map((v) => Math.round(v / 100000));
+const relatedLinks = [
+  { href: '/new-vs-old-tax-regime/', label: 'New vs Old regime' },
+  ...nearLpa.map((n) => ({ href: '/in-hand-salary/' + n + '-lpa/', label: n + ' LPA in-hand' })),
+  { href: '/guides/how-in-hand-salary-is-calculated/', label: 'How in-hand is calculated' },
+  { href: '/guides/ctc-vs-gross-vs-net/', label: 'CTC vs gross vs net' },
+];
 ---
 
 <Base title={title} description={description} path={path} jsonLd={schemas}>
@@ -101,6 +114,8 @@ const others = COMPANIES.filter((x) => x.slug !== c.slug).slice(0, 8);
         ))}
       </div>
     </div>
+
+    <RelatedLinks links={relatedLinks} />
 
     <EmailCapture />
     <Faq items={faqs} />

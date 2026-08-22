@@ -5,9 +5,10 @@ import StaticBreakdown from '../../components/StaticBreakdown.astro';
 import Faq from '../../components/Faq.astro';
 import ExtensionCta from '../../components/ExtensionCta.astro';
 import EmailCapture from '../../components/EmailCapture.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
 import { computeInHand, compareRegimes, type CtcInput } from '../../lib/ctc';
 import { formatINR, formatCompactINR } from '../../lib/format';
-import { SITE, CTC_VALUES } from '../../consts';
+import { SITE, CTC_VALUES, COMPANIES } from '../../consts';
 import { url, canonical } from '../../lib/url';
 import { webAppSchema, faqSchema, breadcrumbSchema } from '../../lib/schema';
 
@@ -49,6 +50,17 @@ const schemas = [
 ];
 
 const others = CTC_VALUES.filter((v) => v !== ctc);
+
+// Cross-silo internal links: nearest companies by sample CTC + pillar guides.
+const nearCompanies = [...COMPANIES]
+  .sort((a, z) => Math.abs(a.sampleCtc - ctc) - Math.abs(z.sampleCtc - ctc))
+  .slice(0, 4);
+const relatedLinks = [
+  { href: '/new-vs-old-tax-regime/', label: 'New vs Old regime →' },
+  ...nearCompanies.map((c) => ({ href: `/companies/${c.slug}/`, label: `${c.name} take-home` })),
+  { href: '/guides/how-in-hand-salary-is-calculated/', label: 'How in-hand is calculated' },
+  { href: '/guides/epf-and-gratuity/', label: 'EPF & gratuity explained' },
+];
 ---
 
 <Base title={title} description={description} path={path} jsonLd={schemas}>
@@ -104,6 +116,8 @@ const others = CTC_VALUES.filter((v) => v !== ctc);
         ))}
       </div>
     </div>
+
+    <RelatedLinks links={relatedLinks} />
 
     <EmailCapture />
     <Faq items={faqs} />
